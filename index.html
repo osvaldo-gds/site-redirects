@@ -1,40 +1,61 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>Redirecionamento Não Autorizado</title>
-    <style>
-        body {
-            background-color: #1a1a1a;
-            color: #f2f2f2;
-            font-family: 'Segoe UI', sans-serif;
-            text-align: center;
-            padding: 50px;
-        }
-        h1 {
-            color: #ff4d4d;
-            font-size: 2em;
-        }
-        p {
-            font-size: 1.2em;
-            margin: 20px 0;
-        }
-        .box {
-            background-color: #2c2c2c;
-            padding: 30px;
-            border-radius: 10px;
-            display: inline-block;
-            box-shadow: 0 0 10px #000;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>PoC – Open Redirect</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+    }
+    h1 {
+      color: #ff4d4d;
+    }
+    .box {
+      background: #1f1f1f;
+      padding: 30px;
+      border-radius: 10px;
+      display: inline-block;
+      box-shadow: 0 0 10px #000;
+    }
+    .button {
+      background-color: #2962ff;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      margin-top: 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+  </style>
 </head>
 <body>
-    <div class="box">
-        <h1>🚨 Redirecionamento Não Autorizado Detectado</h1>
-        <p>Você foi redirecionado para esta página como parte de um teste de segurança.</p>
-        <p>Este comportamento indica que a aplicação original permite <strong>Open Redirect</strong> — um tipo de vulnerabilidade que pode ser explorada para phishing e outros ataques.</p>
-        <hr>
-        <p><em>Esta página é um PoC (Prova de Conceito) mantida por um analista de segurança.</em></p>
-    </div>
+  <div class="box">
+    <h1>🚨 Redirecionamento Não Autorizado</h1>
+    <p>Este site permitiu que você fosse enviado para esta página através de um parâmetro malicioso.</p>
+    <p>Esse comportamento é típico de uma vulnerabilidade de <strong>Open Redirect</strong>.</p>
+    <p id="info"></p>
+    <button class="button" id="goBtn" style="display: none;">Continuar para o destino</button>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectUrl = urlParams.get("redirect");
+
+    if (redirectUrl) {
+      document.getElementById("info").innerText = "Parâmetro detectado: " + redirectUrl;
+      const btn = document.getElementById("goBtn");
+      btn.style.display = "inline-block";
+      btn.onclick = () => {
+        window.location.href = redirectUrl;
+      };
+    } else {
+      document.getElementById("info").innerText = "Nenhum parâmetro de redirecionamento foi detectado.";
+    }
+  </script>
 </body>
 </html>
